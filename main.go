@@ -15,8 +15,14 @@ import (
 )
 const constEndTime = 9999999999999999
 
+const testApiKey  = "5a9ebd7d5f7c8cc17f385f2b36b26181a03fb3dfe78c512cb71f538869a7ea8d6b803385245dfcb698d47be097c82d4759eed12ad106021e2cfa646f905cacfc"
+const testApiStartTime = 1532449279
+const monthInSecond = 2592000
+
+
 var newEvent = false
 var newAV = false
+
 
 type event struct{
 	DateTime 	int
@@ -160,18 +166,10 @@ func haveNewAV()bool{
 }
 
 
-
-func main(){
-	log.SetFlags(log.Lshortfile)
-
-	const testApiKey  = "5a9ebd7d5f7c8cc17f385f2b36b26181a03fb3dfe78c512cb71f538869a7ea8d6b803385245dfcb698d47be097c82d4759eed12ad106021e2cfa646f905cacfc"
-
-	const testApiStartTime = 1532449279
-	const monthInSecond = 2592000
-
+func Start(apiKey string){
 	startTimeEvent:= int(time.Now().Unix())-monthInSecond
 	startTimeAV := startTimeEvent
-	 newDB:= false
+	newDB:= false
 
 	if _, err := os.Stat("./db.db"); os.IsNotExist(err) {
 		_,fileErr:=os.Create("./db.db")
@@ -202,7 +200,7 @@ func main(){
 	fmt.Println("last event time" +strconv.Itoa(startTimeEvent))
 	fmt.Println("last AV time" +strconv.Itoa(startTimeAV))
 
-	result,err:=getEventClient(testApiKey,startTimeEvent,constEndTime)
+	result,err:=getEventClient(apiKey,startTimeEvent,constEndTime)
 	if err!= nil{
 		log.Println(err)
 	}else{
@@ -213,7 +211,7 @@ func main(){
 		}
 	}
 
-	result,err =getAVClient(testApiKey,startTimeAV,constEndTime)
+	result,err =getAVClient(apiKey,startTimeAV,constEndTime)
 	if err!= nil{
 		log.Println(err)
 	}else{
@@ -224,6 +222,14 @@ func main(){
 		}
 	}
 
-	 autoCheckNewEventAndAvClient(db, testApiKey)
-	 db.Close()
+	autoCheckNewEventAndAvClient(db, apiKey)
+	db.Close()
+}
+
+
+func main(){
+	log.SetFlags(log.Lshortfile)
+
+	Start(testApiKey)
+
 }
