@@ -39,7 +39,7 @@ type av struct{
 
 func saveAVToDB(db *sql.DB, jsonStr string) error{
 	if jsonStr!="null"{
-		newAV = true
+
 
 		var av []av
 		json.Unmarshal([]byte(jsonStr),&av)
@@ -55,13 +55,15 @@ func saveAVToDB(db *sql.DB, jsonStr string) error{
 				return err
 			}
 		}
+		newAV = true
 	}
+
 	return nil
 }
 
 func saveEventToDB(db *sql.DB, jsonStr string) error{
 	if jsonStr!="null"{
-		newEvent = true
+
 		var events []event
 		json.Unmarshal([]byte(jsonStr),&events)
 		for _,k:= range events{
@@ -76,6 +78,7 @@ func saveEventToDB(db *sql.DB, jsonStr string) error{
 				return err
 			}
 		}
+		newEvent = true
 	}
 	return nil
 }
